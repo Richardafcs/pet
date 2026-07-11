@@ -364,7 +364,6 @@ main {
   height: 100%;
   position: relative;
   cursor: pointer;
-  animation: koko-breathe 2.8s ease-in-out infinite;
 }
 
 .koko-sprite {
@@ -378,37 +377,53 @@ main {
   background-size: 1536px 2288px;
   background-position: 0 0;
   image-rendering: auto;
-  animation: koko-idle 1.4s steps(8) infinite;
 }
 
 .koko-pet-happy .koko-sprite {
-  animation-name: koko-happy;
+  background-position: 0 -624px;
 }
 
 .koko-pet-sad .koko-sprite,
 .koko-pet-ill .koko-sprite {
-  animation-name: koko-sad;
+  background-position: 0 -1040px;
 }
 
 .koko-pet-bored .koko-sprite {
-  animation-name: koko-bored;
+  background-position: 0 -1664px;
 }
 
 .koko-pet-review .koko-sprite {
-  animation-name: koko-bored;
+  background-position: 0 -1664px;
 }
 
 .koko-pet-waiting .koko-sprite {
-  animation-name: koko-waiting;
-}
-
-.koko-pet-energetic {
-  animation-duration: 1.5s;
+  background-position: 0 -1248px;
 }
 
 .koko-pet-energetic .koko-sprite {
-  animation-name: koko-energetic;
-  animation-duration: 0.9s;
+  background-position: 0 -832px;
+}
+
+.koko-pet-reaction.koko-pet-happy .koko-sprite {
+  animation: koko-happy 900ms steps(7, end) 1 both;
+}
+
+.koko-pet-reaction.koko-pet-sad .koko-sprite,
+.koko-pet-reaction.koko-pet-ill .koko-sprite {
+  animation: koko-sad 900ms steps(7, end) 1 both;
+}
+
+.koko-pet-reaction.koko-pet-bored .koko-sprite,
+.koko-pet-reaction.koko-pet-review .koko-sprite {
+  animation: koko-bored 900ms steps(7, end) 1 both;
+}
+
+.koko-pet-reaction.koko-pet-waiting .koko-sprite {
+  animation: koko-waiting 900ms steps(7, end) 1 both;
+}
+
+.koko-pet-reaction.koko-pet-energetic .koko-sprite {
+  animation: koko-energetic 900ms steps(7, end) 1 both;
 }
 
 .koko-pet-ill {
@@ -428,45 +443,35 @@ main {
   transform: scale(0.5);
 }
 
-.koko-pet-happy .koko-spark,
-.koko-pet-energetic .koko-spark {
+.koko-pet-reaction.koko-pet-happy .koko-spark,
+.koko-pet-reaction.koko-pet-energetic .koko-spark {
   opacity: 0.9;
-  animation: koko-spark 1.8s ease-in-out infinite;
-}
-
-@keyframes koko-idle {
-  from { background-position: 0 0; }
-  to { background-position: -1536px 0; }
+  animation: koko-spark 900ms ease-in-out 1 both;
 }
 
 @keyframes koko-happy {
   from { background-position: 0 -624px; }
-  to { background-position: -1536px -624px; }
+  to { background-position: -1344px -624px; }
 }
 
 @keyframes koko-sad {
   from { background-position: 0 -1040px; }
-  to { background-position: -1536px -1040px; }
+  to { background-position: -1344px -1040px; }
 }
 
 @keyframes koko-bored {
-  from { background-position: 0 -1248px; }
-  to { background-position: -1536px -1248px; }
+  from { background-position: 0 -1664px; }
+  to { background-position: -1344px -1664px; }
 }
 
 @keyframes koko-waiting {
   from { background-position: 0 -1248px; }
-  to { background-position: -1536px -1248px; }
+  to { background-position: -1344px -1248px; }
 }
 
 @keyframes koko-energetic {
   from { background-position: 0 -832px; }
-  to { background-position: -1536px -832px; }
-}
-
-@keyframes koko-breathe {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
+  to { background-position: -1344px -832px; }
 }
 
 @keyframes koko-spark {

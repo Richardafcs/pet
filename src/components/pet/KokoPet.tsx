@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { PetReaction, PetState } from "../../types/domain";
 import { getKokoMode, reactionToMode, type KokoMode } from "./kokoModes";
 
@@ -23,10 +23,18 @@ const modeCopy: Record<KokoMode, string> = {
 export function KokoPet({ visualState, energy, reaction, onInteract }: KokoPetProps) {
   const [isInteracting, setIsInteracting] = useState(false);
   const [activeReaction, setActiveReaction] = useState<PetReaction | undefined>();
+  const hasMounted = useRef(false);
+  const seenReactionId = useRef<string | undefined>(undefined);
   const mode = getKokoMode(visualState, energy);
 
   useEffect(() => {
-    if (!reaction) return;
+    if (!hasMounted.current) {
+      hasMounted.current = true;
+      seenReactionId.current = reaction?.id;
+      return;
+    }
+    if (!reaction || seenReactionId.current === reaction.id) return;
+    seenReactionId.current = reaction.id;
     setActiveReaction(reaction);
     const timer = window.setTimeout(
       () => setActiveReaction(undefined),
@@ -40,6 +48,7 @@ export function KokoPet({ visualState, energy, reaction, onInteract }: KokoPetPr
     : activeReaction
       ? reactionToMode(activeReaction.mode)
       : mode;
+  const isPlayingReaction = Boolean(isInteracting || activeReaction);
 
   useEffect(() => {
     if (!isInteracting) return;
@@ -54,7 +63,7 @@ export function KokoPet({ visualState, energy, reaction, onInteract }: KokoPetPr
 
   return (
     <span
-      className={`koko-pet koko-pet-${activeMode}`}
+      className={`koko-pet koko-pet-${activeMode}${isPlayingReaction ? " koko-pet-reaction" : ""}`}
       role="img"
       aria-label={activeReaction?.label ?? modeCopy[activeMode]}
       onClick={(event) => {
