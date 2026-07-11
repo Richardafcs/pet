@@ -58,8 +58,11 @@ npm run build
 The production deployment serves the React build and the three `/api/*` AI routes
 from one Cloudflare Worker. Static assets are configured in `wrangler.jsonc`, while
 `worker/index.ts` handles recognition, coaching, and daily planning.
-`GET /api/health` reports whether the Worker is running and whether an AI
-provider secret is configured, without exposing the secret itself.
+`GET /api/health` reports whether the Worker is running in bring-your-own-key
+mode and whether an optional operator AI secret is configured, without exposing
+any secret.
+Static responses receive CSP, referrer, MIME-sniffing, framing, and permissions
+headers through `public/_headers`.
 
 Live deployment: https://pet-food-waste.jialepi-apps.workers.dev
 
@@ -76,18 +79,22 @@ Then run:
 npm run dev:cloudflare
 ```
 
-Before the first production deploy, authenticate Wrangler and add at least one
-provider secret:
+Before the first production deploy, authenticate Wrangler:
 
 ```bash
 npx wrangler login
-npx wrangler secret put GOOGLE_AI_API_KEY
-# Or: npx wrangler secret put OPENAI_API_KEY
 npm run deploy
 ```
 
-Model names are non-secret Worker variables in `wrangler.jsonc`. API keys must be
-stored with Wrangler secrets and must never be committed.
+The public deployment uses a bring-your-own-key flow. Each user selects Google AI
+or OpenAI in **AI Settings** and enters their own key. The key is kept in browser
+session storage, sent only on AI requests, and forwarded by the Worker without
+being stored or returned. Model names remain non-secret Worker variables in
+`wrangler.jsonc`.
+
+For a private deployment, an operator may still configure `GOOGLE_AI_API_KEY` or
+`OPENAI_API_KEY` as a Wrangler secret. User-provided keys take precedence for that
+request. API keys must never be committed.
 
 ## Notes
 

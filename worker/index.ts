@@ -52,7 +52,10 @@ export default {
     if (url.pathname === "/api/health") {
       return jsonResponse({
         ok: true,
-        aiConfigured: Boolean(env.GOOGLE_AI_API_KEY || env.OPENAI_API_KEY),
+        mode: "bring-your-own-key",
+        operatorAiConfigured: Boolean(
+          env.GOOGLE_AI_API_KEY || env.OPENAI_API_KEY,
+        ),
       });
     }
 
@@ -66,29 +69,34 @@ export default {
       });
     }
 
-    if (!env.GOOGLE_AI_API_KEY && !env.OPENAI_API_KEY) {
-      return jsonResponse(
-        {
-          error: "GOOGLE_AI_API_KEY or OPENAI_API_KEY is not configured.",
-          missingApiKey: true,
-        },
-        503,
-      );
-    }
-
     try {
+      const requestEnv = withUserCredentials(request, env);
+      if (!requestEnv.GOOGLE_AI_API_KEY && !requestEnv.OPENAI_API_KEY) {
+        return jsonResponse(
+          {
+            error: "Add your API key in AI Settings before using remote AI.",
+            missingApiKey: true,
+          },
+          401,
+        );
+      }
+
       assertRequestSize(request);
       const body = await readJsonBody(request);
 
       if (url.pathname === "/api/recognize") {
-        return jsonResponse(await recognizeImage(body as RecognizeImageRequest, env));
+        return jsonResponse(
+          await recognizeImage(body as RecognizeImageRequest, requestEnv),
+        );
       }
       if (url.pathname === "/api/coach") {
-        return jsonResponse(await createCoachResponse(body as AiCoachRequest, env));
+        return jsonResponse(
+          await createCoachResponse(body as AiCoachRequest, requestEnv),
+        );
       }
       if (url.pathname === "/api/daily-plan") {
         return jsonResponse(
-          await createDailyPlanResponse(body as AiDailyPlanRequest, env),
+          await createDailyPlanResponse(body as AiDailyPlanRequest, requestEnv),
         );
       }
 
@@ -104,6 +112,25 @@ export default {
     }
   },
 };
+
+function withUserCredentials(request: Request, env: Env): Env {
+  const provider = request.headers.get("x-pet-ai-provider");
+  const apiKey = request.headers.get("x-pet-ai-key")?.trim();
+
+  if (!provider && !apiKey) return env;
+  if (provider !== "google" && provider !== "openai") {
+    throw new Error("Unsupported AI provider.");
+  }
+  if (!apiKey || apiKey.length < 8 || apiKey.length > 512) {
+    throw new Error("Invalid user API key.");
+  }
+
+  return {
+    ...env,
+    GOOGLE_AI_API_KEY: provider === "google" ? apiKey : undefined,
+    OPENAI_API_KEY: provider === "openai" ? apiKey : undefined,
+  };
+}
 
 function jsonResponse(
   body: unknown,

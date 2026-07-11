@@ -28,6 +28,10 @@ import type {
   AiUsageTask,
 } from "../../lib/ai/dailyPlan";
 import { normalizeDailyPlanResponse } from "../../lib/ai/dailyPlan";
+import {
+  createUserAiHeaders,
+  type UserAiSettings,
+} from "../../lib/ai/userAiSettings";
 
 type DashboardProps = {
   items: InventoryItem[];
@@ -43,6 +47,7 @@ type DashboardProps = {
   ) => void;
   onNavigate: (view: View) => void;
   onResetDemo: () => void;
+  userAiSettings?: UserAiSettings;
 };
 
 export function Dashboard({
@@ -54,6 +59,7 @@ export function Dashboard({
   onRecordAction,
   onNavigate,
   onResetDemo,
+  userAiSettings,
 }: DashboardProps) {
   const [petLine, setPetLine] = useState("Tap the pet for a kitchen clue.");
   const [coach, setCoach] = useState<
@@ -112,7 +118,7 @@ export function Dashboard({
   }, [activePlanItemsKey, activePlanItems]);
 
   async function askAiCoach() {
-    if (!remoteAiEnabled) {
+    if (!remoteAiEnabled || !userAiSettings) {
       const fallback = createLocalCoachResponse(petContext);
       setPetLine(fallback.petLine);
       setCoach({ kind: "success", response: fallback });
@@ -123,7 +129,7 @@ export function Dashboard({
     try {
       const response = await fetch("/api/coach", {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: createUserAiHeaders(userAiSettings),
         body: JSON.stringify({
           activeItems: activePlanItems.map((item) => ({
             id: item.id,
@@ -178,7 +184,7 @@ export function Dashboard({
   }
 
   async function askDailyPlan() {
-    if (!remoteAiEnabled) {
+    if (!remoteAiEnabled || !userAiSettings) {
       const fallback = createLocalDailyPlan(petContext);
       setPetLine(fallback.petLine);
       setCompletedRecipeSteps({});
@@ -190,7 +196,7 @@ export function Dashboard({
     try {
       const response = await fetch("/api/daily-plan", {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: createUserAiHeaders(userAiSettings),
         body: JSON.stringify({
           activeItems: activePlanItems.map((item) => ({
             id: item.id,

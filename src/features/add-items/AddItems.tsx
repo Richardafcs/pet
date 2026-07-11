@@ -22,6 +22,10 @@ import type {
 } from "../../lib/recognition/aiRecognition";
 import { evaluatePurchaseGuard } from "../../lib/purchase-guard/purchaseGuard";
 import { todayIso } from "../../lib/dates/dates";
+import {
+  createUserAiHeaders,
+  type UserAiSettings,
+} from "../../lib/ai/userAiSettings";
 
 const categoryOptions: FoodCategory[] = [
   "produce",
@@ -60,9 +64,10 @@ type AddItemsProps = {
   items: InventoryItem[];
   onAdd: (draft: InventoryItemDraft) => void;
   onNavigate: (view: View) => void;
+  userAiSettings?: UserAiSettings;
 };
 
-export function AddItems({ items, onAdd, onNavigate }: AddItemsProps) {
+export function AddItems({ items, onAdd, onNavigate, userAiSettings }: AddItemsProps) {
   const [draft, setDraft] = useState<InventoryItemDraft>({
     name: "",
     category: "produce",
@@ -147,7 +152,7 @@ export function AddItems({ items, onAdd, onNavigate }: AddItemsProps) {
       message: `Recognizing ${aiMode === "receipt" ? "receipt" : "food photo"}...`,
     });
 
-    if (!remoteAiEnabled) {
+    if (!remoteAiEnabled || !userAiSettings) {
       loadCandidates(aiMode);
       setRecognitionStatus({
         kind: "success",
@@ -160,7 +165,7 @@ export function AddItems({ items, onAdd, onNavigate }: AddItemsProps) {
       const imageDataUrl = await fileToDataUrl(file);
       const response = await fetch("/api/recognize", {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: createUserAiHeaders(userAiSettings),
         body: JSON.stringify({
           mode: aiMode,
           imageDataUrl,
