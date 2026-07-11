@@ -342,33 +342,141 @@ main {
 }
 
 .pet-avatar {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
+  width: 220px;
+  height: 250px;
+  border-radius: 24px;
   border: 0;
-  background: #ffcc5c;
+  background: transparent;
   position: relative;
-  box-shadow: inset -10px -12px rgba(0, 0, 0, 0.08);
   transition: transform 160ms ease;
+  overflow: visible;
 }
 
 .pet-avatar:hover {
   transform: translateY(-4px);
 }
 
-.pet-face {
-  font-size: 2.25rem;
-  font-weight: 800;
+.koko-pet {
+  --koko-scale: 1.08;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  cursor: pointer;
+  animation: koko-breathe 2.8s ease-in-out infinite;
+}
+
+.koko-sprite {
+  width: 192px;
+  height: 208px;
+  display: block;
+  transform: scale(var(--koko-scale));
+  transform-origin: center bottom;
+  background-image: url("/pets/koko/spritesheet.webp");
+  background-repeat: no-repeat;
+  background-size: 1536px 2288px;
+  background-position: 0 0;
+  image-rendering: auto;
+  animation: koko-idle 1.4s steps(8) infinite;
+}
+
+.koko-pet-happy .koko-sprite {
+  animation-name: koko-happy;
+}
+
+.koko-pet-sad .koko-sprite,
+.koko-pet-ill .koko-sprite {
+  animation-name: koko-sad;
+}
+
+.koko-pet-bored .koko-sprite {
+  animation-name: koko-bored;
+}
+
+.koko-pet-waiting .koko-sprite {
+  animation-name: koko-waiting;
+}
+
+.koko-pet-energetic {
+  animation-duration: 1.5s;
+}
+
+.koko-pet-energetic .koko-sprite {
+  animation-name: koko-energetic;
+  animation-duration: 0.9s;
+}
+
+.koko-pet-ill {
+  filter: saturate(0.72) hue-rotate(8deg);
+  animation-duration: 4s;
+}
+
+.koko-spark {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ffcc5c;
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.koko-pet-happy .koko-spark,
+.koko-pet-energetic .koko-spark {
+  opacity: 0.9;
+  animation: koko-spark 1.8s ease-in-out infinite;
+}
+
+@keyframes koko-idle {
+  from { background-position: 0 0; }
+  to { background-position: -1536px 0; }
+}
+
+@keyframes koko-happy {
+  from { background-position: 0 -624px; }
+  to { background-position: -1536px -624px; }
+}
+
+@keyframes koko-sad {
+  from { background-position: 0 -1040px; }
+  to { background-position: -1536px -1040px; }
+}
+
+@keyframes koko-bored {
+  from { background-position: 0 -1248px; }
+  to { background-position: -1536px -1248px; }
+}
+
+@keyframes koko-waiting {
+  from { background-position: 0 -1248px; }
+  to { background-position: -1536px -1248px; }
+}
+
+@keyframes koko-energetic {
+  from { background-position: 0 -832px; }
+  to { background-position: -1536px -832px; }
+}
+
+@keyframes koko-breathe {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+@keyframes koko-spark {
+  0%, 100% { transform: scale(0.5) rotate(0deg); }
+  50% { transform: scale(1) rotate(45deg); }
 }
 
 .pet-room.hungry .pet-avatar {
-  background: #f6b766;
   transform: translateY(-6px);
 }
 
 .pet-room.sad .pet-avatar,
 .pet-room.tired .pet-avatar {
-  background: #c7d1b6;
+  background: transparent;
 }
 
 .pet-room.tired .pet-avatar {
@@ -380,7 +488,6 @@ main {
 }
 
 .pet-room.sick .pet-avatar {
-  background: #d7aaa0;
   transform: rotate(-4deg);
 }
 

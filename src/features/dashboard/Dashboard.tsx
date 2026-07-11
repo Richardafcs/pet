@@ -26,6 +26,7 @@ import type {
   AiUsageTask,
 } from "../../lib/ai/dailyPlan";
 import { normalizeDailyPlanResponse } from "../../lib/ai/dailyPlan";
+import { KokoPet } from "../../components/pet/KokoPet";
 import {
   createUserAiHeaders,
   type UserAiSettings,
@@ -255,7 +256,11 @@ export function Dashboard({
             onClick={() => setPetLine(getPetMessage("mission", petContext))}
             aria-label="Ask pet for current reminder"
           >
-            <span className="pet-face">{getPetFace(displayVisualState)}</span>
+            <KokoPet
+              visualState={displayVisualState}
+              energy={pet.energy}
+              onInteract={() => setPetLine(getPetMessage("mission", petContext))}
+            />
             <span className="pet-shadow" />
           </button>
         </div>
@@ -555,15 +560,6 @@ function getDisplayVisualState(
     return "hungry";
   }
   return visualState;
-}
-
-function getPetFace(visualState: PetState["visualState"]): string {
-  if (visualState === "happy") return "＾ᴗ＾";
-  if (visualState === "hungry") return "•﹏•";
-  if (visualState === "tired") return "－_－";
-  if (visualState === "sad") return "；︵；";
-  if (visualState === "sick") return "×︵×";
-  return "•ᴗ•";
 }
 
 function AiDailyPlanPanel({
