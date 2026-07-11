@@ -53,6 +53,40 @@ npm run lint
 npm run build
 ```
 
+## Cloudflare Workers Deployment
+
+The production deployment serves the React build and the three `/api/*` AI routes
+from one Cloudflare Worker. Static assets are configured in `wrangler.jsonc`, while
+`worker/index.ts` handles recognition, coaching, and daily planning.
+`GET /api/health` reports whether the Worker is running and whether an AI
+provider secret is configured, without exposing the secret itself.
+
+For local Worker development, create an ignored `.dev.vars` file:
+
+```bash
+GOOGLE_AI_API_KEY=your_key_here
+# Or use OPENAI_API_KEY instead.
+```
+
+Then run:
+
+```bash
+npm run dev:cloudflare
+```
+
+Before the first production deploy, authenticate Wrangler and add at least one
+provider secret:
+
+```bash
+npx wrangler login
+npx wrangler secret put GOOGLE_AI_API_KEY
+# Or: npx wrangler secret put OPENAI_API_KEY
+npm run deploy
+```
+
+Model names are non-secret Worker variables in `wrangler.jsonc`. API keys must be
+stored with Wrangler secrets and must never be committed.
+
 ## Notes
 
 Food dates and plans are guidance only. The app must not be treated as a food safety authority; users should still check storage, packaging, smell, appearance, and local food safety guidance.
