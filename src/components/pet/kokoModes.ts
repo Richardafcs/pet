@@ -27,13 +27,13 @@ const baseFrames: Record<KokoMode, KokoFrame> = {
 };
 
 const reactionFrames: Partial<Record<KokoMode, KokoFrame>> = {
-  happy: { row: 3, column: 2 },
-  sad: { row: 5, column: 3 },
-  bored: { row: 8, column: 4 },
-  review: { row: 8, column: 4 },
-  ill: { row: 5, column: 4 },
-  energetic: { row: 4, column: 2 },
-  waiting: { row: 6, column: 3 },
+  happy: { row: 3, column: 3 },
+  sad: { row: 5, column: 7 },
+  bored: { row: 8, column: 5 },
+  review: { row: 8, column: 5 },
+  ill: { row: 5, column: 7 },
+  energetic: { row: 4, column: 4 },
+  waiting: { row: 6, column: 5 },
 };
 
 export function getKokoMode(

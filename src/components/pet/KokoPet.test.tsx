@@ -26,11 +26,11 @@ describe("Koko behavior mapping", () => {
       expect(stable.row).toBeGreaterThanOrEqual(0);
       expect(stable.row).toBeLessThan(11);
       expect(stable.column).toBeGreaterThanOrEqual(0);
-      expect(stable.column).toBeLessThan(6);
+      expect(stable.column).toBeLessThan(8);
       expect(reaction.row).toBeGreaterThanOrEqual(0);
       expect(reaction.row).toBeLessThan(11);
       expect(reaction.column).toBeGreaterThanOrEqual(0);
-      expect(reaction.column).toBeLessThan(6);
+      expect(reaction.column).toBeLessThan(8);
     }
   });
 });
