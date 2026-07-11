@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { addDays, parseISO } from "date-fns";
 import type { MissionCard } from "../types/domain";
 import { usePetStore } from "../lib/storage/usePetStore";
@@ -32,11 +32,13 @@ function App() {
     actions,
     purchaseDecisions,
     pet,
+    petReaction,
     lastToast,
     addManualItem,
     updateInventoryItem,
     recordAction,
     recordPurchaseDecision,
+    recalculatePet,
     resetDemo,
     clearAll,
     dismissToast,
@@ -56,6 +58,10 @@ function App() {
     .filter((mission): mission is MissionCard => Boolean(mission));
   const impact = calculateImpact({ items, actions, purchaseDecisions, pet });
 
+  useEffect(() => {
+    recalculatePet(today);
+  }, [recalculatePet, today]);
+
   return (
     <div className="app-shell">
       <Topbar
@@ -73,8 +79,11 @@ function App() {
             availableItems={availableItems}
             missions={missions}
             pet={pet}
+            petReaction={petReaction}
             today={today}
-            onRecordAction={recordAction}
+            onRecordAction={(item, type, quantity, note) =>
+              recordAction(item, type, quantity, note, today)
+            }
             onNavigate={setView}
             onResetDemo={resetDemo}
             userAiSettings={userAiSettings}
@@ -83,9 +92,9 @@ function App() {
         {view === "add" && (
           <AddItems
             items={availableItems}
-            onAdd={addManualItem}
+            onAdd={(draft) => addManualItem(draft, today)}
             onNavigate={setView}
-            onRecordPurchaseDecision={recordPurchaseDecision}
+            onRecordPurchaseDecision={(input) => recordPurchaseDecision(input, today)}
             userAiSettings={userAiSettings}
           />
         )}
@@ -93,8 +102,10 @@ function App() {
           <Inventory
             items={items}
             today={today}
-            onUpdateItem={updateInventoryItem}
-            onRecordAction={recordAction}
+            onUpdateItem={(item, patch) => updateInventoryItem(item, patch, today)}
+            onRecordAction={(item, type, quantity, note) =>
+              recordAction(item, type, quantity, note, today)
+            }
             onClearAll={clearAll}
           />
         )}
