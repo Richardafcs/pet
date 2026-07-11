@@ -178,7 +178,7 @@ export const usePetStore = create<PetStore>()(
           type === "partially_used"
             ? usage.item.status === "used"
               ? `${item.name} finished. ${describeActionReward("used")}`
-              : `${item.name} check-in saved. I will keep it on the rescue list.`
+              : `${item.name} check-in saved. ${describeActionReward("partially_used")}`
             : type === "used"
               ? `${item.name} rescued. ${describeActionReward(type)}`
               : type === "frozen"

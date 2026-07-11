@@ -2,8 +2,8 @@
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
-  color: #24302f;
-  background: #f7f3ec;
+  color: #16382b;
+  background: #eff9f1;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
@@ -16,6 +16,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  background: #eff9f1;
 }
 
 button,
@@ -1264,17 +1265,72 @@ progress {
   align-items: center;
   gap: 1rem;
   justify-content: space-between;
-  background: #24302f;
-  color: #fffaf2;
+  background: #123d2c;
+  color: #f4fff6;
   padding: 0.75rem 0.85rem;
-  border-radius: 8px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.22);
+  border-radius: 16px;
+  box-shadow: 0 18px 44px rgba(18, 61, 44, 0.26);
+  animation: toast-enter 260ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+  z-index: 60;
 }
 
 .toast button {
-  color: #fffaf2;
+  color: #f4fff6;
   background: transparent;
   border-color: rgba(255, 255, 255, 0.25);
+}
+
+.toast-reward {
+  min-width: min(360px, calc(100vw - 2rem));
+  border: 1px solid rgba(167, 239, 187, 0.5);
+  background: linear-gradient(135deg, #145b3e, #237b51);
+}
+
+.toast-reward-badge {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  border-radius: 50%;
+  background: #b9f2c8;
+  color: #145b3e;
+  font-weight: 900;
+  font-size: 1.05rem;
+  animation: score-pop 420ms cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+
+.toast-copy {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.toast-copy strong {
+  font-size: 0.95rem;
+}
+
+.toast-copy span {
+  color: #d8ffe2;
+  font-size: 0.82rem;
+  text-transform: capitalize;
+}
+
+.toast-copy small {
+  color: rgba(244, 255, 246, 0.78);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@keyframes toast-enter {
+  from { opacity: 0; transform: translateY(14px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes score-pop {
+  from { opacity: 0; transform: scale(0.45) rotate(-10deg); }
+  to { opacity: 1; transform: scale(1) rotate(0); }
 }
 
 .qr-backdrop {
@@ -1443,5 +1499,147 @@ progress {
 
   .usage-task button {
     width: 100%;
+  }
+}
+
+/* Green waste-rescue visual system */
+button,
+a.button-link {
+  border-color: #c7e5cf;
+  background: #fbfffc;
+  color: #16382b;
+  border-radius: 14px;
+  box-shadow: 0 2px 0 rgba(22, 56, 43, 0.04);
+  transition:
+    transform 140ms ease,
+    box-shadow 140ms ease,
+    border-color 140ms ease,
+    background-color 140ms ease;
+}
+
+button:hover,
+a.button-link:hover {
+  border-color: #71c58e;
+  background: #f0fbf3;
+  box-shadow: 0 5px 14px rgba(39, 116, 75, 0.12);
+}
+
+button:active,
+a.button-link:active {
+  transform: translateY(2px) scale(0.975);
+  box-shadow: 0 1px 2px rgba(22, 56, 43, 0.08);
+}
+
+button:focus-visible,
+a.button-link:focus-visible {
+  outline: 3px solid rgba(84, 190, 119, 0.35);
+  outline-offset: 2px;
+}
+
+.primary {
+  border-color: #237b51;
+  background: #237b51;
+  color: #f7fff8;
+  box-shadow: 0 5px 0 #15563a;
+}
+
+.primary:hover {
+  border-color: #2d9160;
+  background: #2d9160;
+}
+
+.primary:active {
+  box-shadow: 0 2px 0 #15563a;
+}
+
+.topbar {
+  border-bottom-color: #cfe8d5;
+  background: rgba(248, 255, 249, 0.94);
+}
+
+.brand svg,
+.empty-state svg {
+  color: #237b51;
+}
+
+nav button.active {
+  background: #16583c;
+  color: #f4fff6;
+  border-color: #16583c;
+}
+
+.waste-brief,
+.pet-room,
+.mission-panel,
+.pulse-panel,
+.manual-form,
+.candidate-panel,
+.inventory-view,
+.impact-view,
+.settings-view {
+  border-color: #cfe8d5;
+  background: #fbfffc;
+  border-radius: 18px;
+  box-shadow: 0 12px 32px rgba(39, 116, 75, 0.07);
+}
+
+.waste-brief {
+  border-color: #8ed0a3;
+  background: linear-gradient(135deg, #f8fff9, #edf9f0);
+}
+
+.waste-brief-metric,
+.settings-card,
+.privacy-card,
+.ai-coach {
+  border-color: #d5ebda;
+  background: #ffffff;
+  border-radius: 14px;
+}
+
+.room-scene {
+  background:
+    radial-gradient(circle at 75% 18%, rgba(112, 208, 139, 0.32), transparent 30%),
+    linear-gradient(180deg, #e9f8ed, #d8f0df);
+  border-radius: 16px;
+}
+
+.fridge {
+  background: #f6fff7;
+  border-color: #b7dfc0;
+  border-radius: 14px;
+}
+
+.pet-status-panel.happy,
+.pet-status-panel.calm {
+  border-color: #b7dfc0;
+  background: #effaf1;
+}
+
+.pet-status-panel.hungry,
+.pet-status-panel.tired {
+  border-color: #e6d596;
+  background: #fffbed;
+}
+
+.pet-status-panel.sad,
+.pet-status-panel.sick {
+  border-color: #e3c1ad;
+  background: #fff6f0;
+}
+
+.toast button {
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
