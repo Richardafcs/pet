@@ -1,4 +1,4 @@
-# Pet
+# EcoPaw
 
 A hackathon MVP for reducing household food waste with a virtual pet.
 

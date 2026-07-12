@@ -54,17 +54,11 @@ Product implication:
 
 ## 5. Revised Product Name and One-Liner
 
-Working name can remain `pet`, but the pitch name should be more specific.
-
-Recommended:
-
-- **WasteLess Pet**
-- **Rescue Pet**
-- **Pantry Pet**
+Product name: **EcoPaw**
 
 One-liner:
 
-> WasteLess Pet is a playful food rescue assistant that checks your planned purchases, reminds you about the few foods most likely to be wasted, and turns rescue actions into a pet feedback loop.
+> EcoPaw is a playful food rescue assistant that checks your planned purchases, reminds you about the few foods most likely to be wasted, and turns rescue actions into a pet feedback loop.
 
 Short pitch:
 

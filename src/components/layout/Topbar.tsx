@@ -119,7 +119,7 @@ export function Topbar({
       <div className="brand">
         <PawPrint aria-hidden="true" />
         <div>
-          <strong>pet</strong>
+          <strong>EcoPaw</strong>
           <span>Waste-less kitchen companion</span>
         </div>
       </div>
